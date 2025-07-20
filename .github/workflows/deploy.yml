@@ -1,0 +1,31 @@
+name: Deploy React App to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@v2
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: 📦 Install Client Dependencies
+        run: npm install --prefix client
+
+      - name: 🛠️ Build React App
+        run: npm run build --prefix client
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: pooji1620/github-pages-deploy-action@main 
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: client/build
